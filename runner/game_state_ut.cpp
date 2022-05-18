@@ -3,10 +3,10 @@
 
 TEST(GameState, SetCell) {
     GameState game{};
-    ASSERT_EQ(game.GetCell(0, 0), Players::Unknown);
+    ASSERT_EQ(game.GetCellState(0, 0), Players::Unknown);
     ASSERT_TRUE(game.CanMakeMove(Players::Me, 0, 0));
     game.MakeMove(Players::Me, 0, 0);
-    ASSERT_EQ(game.GetCell(0, 0), Players::Me);
+    ASSERT_EQ(game.GetCellState(0, 0), Players::Me);
     ASSERT_FALSE(game.CanMakeMove(Players::Me, 0, 0));
 }
 
@@ -18,9 +18,9 @@ TEST(GameState, MetaCellVertical) {
     game.MakeMove(Players::Me, 3, 0);
     game.MakeMove(Players::Opponent, 1, 1);
     game.MakeMove(Players::Me, 3, 3);
-    ASSERT_EQ(game.GetMetaCell(0, 0), Players::Unknown);
+    ASSERT_EQ(game.GetMetaCellState(0, 0), Players::Unknown);
     game.MakeMove(Players::Opponent, 1, 2);
-    ASSERT_EQ(game.GetMetaCell(0, 0), Players::Opponent);
+    ASSERT_EQ(game.GetMetaCellState(0, 0), Players::Opponent);
 }
 
 TEST(GameState, MetaCellHorizontal) {
@@ -31,9 +31,9 @@ TEST(GameState, MetaCellHorizontal) {
     game.MakeMove(Players::Me, 0, 3);
     game.MakeMove(Players::Opponent, 1, 1);
     game.MakeMove(Players::Me, 3, 3);
-    ASSERT_EQ(game.GetMetaCell(0, 0), Players::Unknown);
+    ASSERT_EQ(game.GetMetaCellState(0, 0), Players::Unknown);
     game.MakeMove(Players::Opponent, 2, 1);
-    ASSERT_EQ(game.GetMetaCell(0, 0), Players::Opponent);
+    ASSERT_EQ(game.GetMetaCellState(0, 0), Players::Opponent);
 }
 
 TEST(GameState, MetaCellDiagonal) {
@@ -43,9 +43,9 @@ TEST(GameState, MetaCellDiagonal) {
     game.MakeMove(Players::Opponent, 3, 3);
     game.MakeMove(Players::Me, 2, 2);
     game.MakeMove(Players::Opponent, 6, 6);
-    ASSERT_EQ(game.GetMetaCell(0, 0), Players::Unknown);
+    ASSERT_EQ(game.GetMetaCellState(0, 0), Players::Unknown);
     game.MakeMove(Players::Me, 0, 0);
-    ASSERT_EQ(game.GetMetaCell(0, 0), Players::Me);
+    ASSERT_EQ(game.GetMetaCellState(0, 0), Players::Me);
 }
 
 TEST(GameState, MetaCellRule) {
@@ -75,6 +75,24 @@ TEST(GameState, MetaCellRule) {
 
     ASSERT_FALSE(game.GameFinished());
     game.MakeMove(Players::Me, 1, 8);
+
     ASSERT_TRUE(game.GameFinished());
     ASSERT_EQ(game.GetWinner(), Players::Me);
+}
+
+TEST(GameState, CanGoToAnyMetaCellIfNextCellCapture) {
+    GameState game{};
+
+    game.MakeMove(Players::Me, 1, 0);
+    game.MakeMove(Players::Opponent, 3, 0);
+    game.MakeMove(Players::Me, 1, 1);
+    game.MakeMove(Players::Opponent, 3, 3);
+    game.MakeMove(Players::Me, 1, 2);
+    game.MakeMove(Players::Opponent, 3, 6);
+
+    ASSERT_FALSE(game.CanMakeMove(Players::Me, 0, 0));
+    ASSERT_TRUE(game.CanMakeMove(Players::Me, 4, 4));
+    ASSERT_TRUE(game.CanMakeMove(Players::Me, 7, 7));
+
+    std::cout << game << std::endl;
 }

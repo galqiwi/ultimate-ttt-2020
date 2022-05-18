@@ -7,7 +7,7 @@ PlayerId AnotherPlayer(PlayerId player) {
     if (player == Players::Opponent) {
         return Players::Me;
     }
-    return Players::Unknown;
+    abort();
 }
 
 void GameState::MakeMove(PlayerId player, int x, int y) {
@@ -27,7 +27,10 @@ bool GameState::CanMakeMove(PlayerId player, int x, int y) const {
         return false;
     }
 
-    if (LastPlayer_ != Players::Unknown && (x / 3 != NextMetaX_ || y / 3 != NextMetaY_)) {
+    if (
+        LastPlayer_ != Players::Unknown
+        && (x / 3 != NextMetaX_ || y / 3 != NextMetaY_)
+        && (MetaField_[GetMetaCellId(NextMetaX_, NextMetaY_)] == Players::Unknown)) {
         return false;
     }
 
@@ -119,11 +122,11 @@ void GameState::UpdateMetaCell(int xMeta, int yMeta) {
     }
 }
 
-PlayerId GameState::GetCell(int x, int y) const {
+PlayerId GameState::GetCellState(int x, int y) const {
     return Field_[GetCellId(x, y)];
 }
 
-PlayerId GameState::GetMetaCell(int xMeta, int yMeta) const {
+PlayerId GameState::GetMetaCellState(int xMeta, int yMeta) const {
     return MetaField_[GetMetaCellId(xMeta, yMeta)];
 }
 
@@ -187,4 +190,43 @@ bool GameState::GameFinished() const {
 GameState::GameState() {
     Field_.fill(Players::Unknown);
     MetaField_.fill(Players::Unknown);
+}
+
+std::ostream& operator<<(std::ostream& out, const GameState& game) {
+    for (int y = 0; y < FIELD_SIDE + 1; ++y) {
+        if (y % (FIELD_SIDE / META_FIELD_SIDE) == 0) {
+            for (int x = 0; x < (FIELD_SIDE + META_FIELD_SIDE) * 2 + 1; ++x) {
+                out << "-";
+            }
+            if (y < FIELD_SIDE) {
+                out << std::endl;
+            }
+        }
+
+        if (y == FIELD_SIDE) {
+            continue;
+        }
+
+        for (int x = 0; x < FIELD_SIDE + 1; ++x) {
+            if (x % (FIELD_SIDE / META_FIELD_SIDE) == 0) {
+                out << "| ";
+            }
+            if (x == FIELD_SIDE) {
+                continue;
+            }
+            out << GetPlayerChar(game.GetCellState(x, y)) << " ";
+        }
+        out << std::endl;
+    }
+    return out;
+}
+
+char GetPlayerChar(PlayerId player) {
+    static std::unordered_map<PlayerId, char> names = {
+        {Players::Me, 'M'},
+        {Players::Opponent, 'E'},
+        {Players::Unknown, 'U'},
+    };
+
+    return names[player];
 }
