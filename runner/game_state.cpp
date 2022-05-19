@@ -1,11 +1,11 @@
 #include "game_state.h"
 
 PlayerId AnotherPlayer(PlayerId player) {
-    if (player == Players::Me) {
-        return Players::Opponent;
+    if (player == Players::First) {
+        return Players::Second;
     }
-    if (player == Players::Opponent) {
-        return Players::Me;
+    if (player == Players::Second) {
+        return Players::First;
     }
     abort();
 }
@@ -223,8 +223,8 @@ std::ostream& operator<<(std::ostream& out, const GameState& game) {
 
 char GetPlayerChar(PlayerId player) {
     static std::unordered_map<PlayerId, char> names = {
-        {Players::Me, 'M'},
-        {Players::Opponent, 'E'},
+        {Players::First, 'M'},
+        {Players::Second, 'E'},
         {Players::Unknown, 'U'},
     };
 

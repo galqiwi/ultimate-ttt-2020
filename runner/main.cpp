@@ -1,13 +1,18 @@
 #include "game_state.h"
 #include <iostream>
 
+std::pair<int, int> AskNextMove(PlayerId player) {
+    int x, y;
+    std::cin >> x >> y;
+    return {x, y};
+}
+
 int main() {
     GameState game;
-    PlayerId player = Players::Me;
+    PlayerId player = Players::First;
 
     while(!game.GameFinished()) {
-        int x, y;
-        std::cin >> x >> y;
+        auto [x, y] = AskNextMove(player);
 
         if (game.CanMakeMove(player, x, y)) {
             game.MakeMove(player, x, y);

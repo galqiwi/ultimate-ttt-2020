@@ -11,9 +11,9 @@ using PlayerId = int8_t;
 
 namespace Players {
 
-constexpr PlayerId Me = 1;
-constexpr PlayerId Opponent = -1;
 constexpr PlayerId Unknown = 0;
+constexpr PlayerId First = 1;
+constexpr PlayerId Second = 2;
 
 }
 
