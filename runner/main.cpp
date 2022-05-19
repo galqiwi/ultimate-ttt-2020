@@ -16,8 +16,8 @@ int main() {
 
         if (game.CanMakeMove(player, x, y)) {
             game.MakeMove(player, x, y);
+            std::cout << "OK" << std::endl;
         } else {
-            std::cout << "invalid move" << std::endl;
             std::cout << (int)AnotherPlayer(player) << std::endl;
             return 0;
         }

@@ -192,6 +192,18 @@ GameState::GameState() {
     MetaField_.fill(Players::Unknown);
 }
 
+std::optional<std::pair<int, int>> GameState::GetNextMeta() const {
+    if (LastPlayer_ == Players::Unknown) {
+        return std::nullopt;
+    }
+
+    if (MetaField_[GetMetaCellId(NextMetaX_, NextMetaY_)] != Players::Unknown) {
+        return std::nullopt;
+    }
+
+    return std::make_pair(NextMetaX_, NextMetaY_);
+}
+
 std::ostream& operator<<(std::ostream& out, const GameState& game) {
     for (int y = 0; y < FIELD_SIDE + 1; ++y) {
         if (y % (FIELD_SIDE / META_FIELD_SIDE) == 0) {

@@ -36,6 +36,8 @@ public:
 
     PlayerId GetWinner() const;
     bool GameFinished() const;
+
+    std::optional<std::pair<int, int>> GetNextMeta() const;
 private:
     inline static int GetCellId(int x, int y);
     inline static int GetMetaCellId(int xMeta, int yMeta);
