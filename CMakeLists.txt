@@ -3,7 +3,9 @@ project(runner)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(runner runner/main.cpp runner/game_state.cpp runner/game_state.h)
+add_executable(runner runner/runner.cpp runner/game_state.cpp runner/game_state.h)
+
+add_executable(strategy runner/game_state.cpp runner/game_state.h strategy/strategy_main.cpp strategy/Strategy.cpp strategy/Strategy.h)
 
 enable_testing()
 
