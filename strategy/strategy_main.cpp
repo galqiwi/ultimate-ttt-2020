@@ -6,24 +6,31 @@
 std::optional<std::pair<int, int>> GetEnemyMove() {
     int x, y;
     std::cin >> x >> y;
-    if (x == -1) {
+    if (x == -1 && y == -1) {
         return std::nullopt;
     }
     return std::make_pair(x, y);
 }
 
-int main() {
+void RunMatch() {
     Strategy s;
 
     bool firstMove = true;
 
     while (true) {
         auto enemyMove = GetEnemyMove();
-        auto [x, y] = s.GetNextMove(enemyMove);
-        std::cout << x << " " << y << std::endl;
         if (!enemyMove && !firstMove) {
-            return 0;
+            return;
         }
         firstMove = false;
+
+        auto [x, y] = s.GetNextMove(enemyMove);
+        std::cout << x << " " << y << std::endl;
+    }
+}
+
+int main() {
+    while (true) {
+        RunMatch();
     }
 }

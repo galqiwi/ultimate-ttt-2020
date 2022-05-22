@@ -7,7 +7,7 @@ std::pair<int, int> AskNextMove(PlayerId player) {
     return {x, y};
 }
 
-int main() {
+void RunGame() {
     GameState game;
     PlayerId player = Players::First;
 
@@ -16,14 +16,23 @@ int main() {
 
         if (game.CanMakeMove(player, x, y)) {
             game.MakeMove(player, x, y);
-            std::cout << "OK" << std::endl;
+            std::cout << Players::Unknown << std::endl;
         } else {
-            std::cout << (int)AnotherPlayer(player) << std::endl;
-            return 0;
+            std::cout << AnotherPlayer(player) << std::endl;
+            return;
         }
 
         player = AnotherPlayer(player);
     }
-    std::cout << (int)game.GetWinner() << std::endl;
-    return 0;
+    auto winner = game.GetWinner();
+    if (winner == Players::Unknown) {
+        winner = Players::Draw;
+    }
+    std::cout << winner << std::endl;
+}
+
+int main() {
+    while (true) {
+        RunGame();
+    }
 }

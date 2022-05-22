@@ -7,13 +7,14 @@
 #include <ostream>
 #include <unordered_map>
 
-using PlayerId = int8_t;
+using PlayerId = int;
 
 namespace Players {
 
 constexpr PlayerId Unknown = 0;
 constexpr PlayerId First = 1;
 constexpr PlayerId Second = 2;
+constexpr PlayerId Draw = 3;
 
 }
 
